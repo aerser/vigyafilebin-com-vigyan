@@ -6,8 +6,8 @@
     <title>ヴィギャファイル便</title>
 </head>
 <body>
-    <h2>Google Drive アップローダー</h2>
-    <button onclick="authenticate()">Googleにログイン</button>
+    <h2>ヴィギャファイル便</h2>
+    <button onclick="authenticate()">Googleでログイン</button>
     <input type="file" id="fileInput">
     <button onclick="uploadFile()">アップロード</button>
     <p id="status"></p>
@@ -16,7 +16,7 @@
 
         function authenticate() {
             const clientId = "YOUR_CLIENT_ID_HERE";
-            const redirectUri = "YOUR_REDIRECT_URI_HERE";
+            const redirectUri = "https://aerser.github.io/-server17/";
             const scope = "https://www.googleapis.com/auth/drive.file";
             const authUrl = `https://accounts.google.com/o/oauth2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}`;
             window.location.href = authUrl;
