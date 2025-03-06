@@ -4,13 +4,70 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ヴィギャファイル便</title>
+    <meta name="google-signin-client_id" content="YOUR_CLIENT_ID.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        h2 {
+            color: #333;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px 0;
+            color: #fff;
+            background-color: #4285f4;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            text-align: center;
+            text-decoration: none;
+            font-size: 16px;
+        }
+        .button:hover {
+            background-color: #357ae8;
+        }
+        #logout-button {
+            display: none;
+            background-color: #db4437;
+        }
+        #logout-button:hover {
+            background-color: #c23321;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        #status {
+            margin-top: 20px;
+            color: #333;
+        }
+    </style>
 </head>
 <body>
-    <h2>ヴィギャファイル便</h2>
-    <button onclick="authenticate()">Googleでログイン</button>
-    <input type="file" id="fileInput">
-    <button onclick="uploadFile()">アップロード</button>
-    <p id="status"></p>
+    <div class="container">
+        <h2>ヴィギャファイル便</h2>
+        <div id="g-signin2" class="g-signin2" data-onsuccess="onSignIn"></div>
+        <button id="logout-button" class="button" onclick="signOut()">ログアウト</button>
+        <input type="file" id="fileInput">
+        <button class="button" onclick="uploadFile()">アップロード</button>
+        <p id="status"></p>
+    </div>
     <script>
         let accessToken = "";
 
@@ -75,6 +132,37 @@
         }
 
         window.onload = getAccessToken;
+
+        function onSignIn(googleUser) {
+            // ユーザーのプロファイルを取得
+            var profile = googleUser.getBasicProfile();
+            console.log('ID: ' + profile.getId());
+            console.log('Name: ' + profile.getName());
+            console.log('Image URL: ' + profile.getImageUrl());
+            console.log('Email: ' + profile.getEmail());
+
+            // ログインボタンを隠してログアウトボタンを表示
+            document.getElementById('g-signin2').style.display = 'none';
+            document.getElementById('logout-button').style.display = 'block';
+        }
+
+        function signOut() {
+            var auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(function () {
+                console.log('User signed out.');
+
+                // ログアウト後にログインボタンを再表示
+                document.getElementById('g-signin2').style.display = 'block';
+                document.getElementById('logout-button').style.display = 'none';
+            });
+        }
+
+        // Google API クライアントの初期化
+        function init() {
+            gapi.load('auth2', function() {
+                gapi.auth2.init();
+            });
+        }
     </script>
 </body>
 </html>
